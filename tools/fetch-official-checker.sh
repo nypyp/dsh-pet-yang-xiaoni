@@ -22,6 +22,12 @@ paths=(
 refs=("$REF" "main")
 
 mkdir -p "$(dirname "$OUT")"
+
+# Reuse a previously downloaded copy (offline runs, CI cache).
+if [[ "${FORCE_FETCH:-0}" != "1" ]] && [[ -s "$OUT" ]]; then
+  echo "using cached $OUT ($(wc -c < "$OUT") bytes); set FORCE_FETCH=1 to re-download"
+  exit 0
+fi
 for ref in "${refs[@]}"; do
   for path in "${paths[@]}"; do
     for url in "https://raw.githubusercontent.com/$REPO/$ref/$path" \

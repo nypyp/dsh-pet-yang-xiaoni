@@ -1,0 +1,49 @@
+name: Bug / 行为不符
+description: 动画、触发条件、导入或显示问题
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        先看 [docs/known-issues.md](../docs/known-issues.md)：有些「问题」是 App 侧规则（例如「恼了」需要 1.1 秒内连点 6 下）。
+        能复现的话，请描述「你做了什么 → 期望 → 实际」，最好附录屏。
+  - type: textarea
+    id: what
+    attributes:
+      label: 现象
+      description: 哪个动画/状态，看起来哪里不对
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: 1. 导入包  2. 让 agent 跑命令  3. 观察宠物……
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: 出现位置
+      options:
+        - DSH Go 聊天页
+        - DSH Go 桌面悬浮窗
+        - 导入/设置页
+        - 其它
+    validations:
+      required: true
+  - type: input
+    id: app
+    attributes:
+      label: App 版本
+      placeholder: 设置 → 关于 里的版本号
+  - type: input
+    id: pack
+    attributes:
+      label: 宠物包版本
+      placeholder: git describe --tags（例如 v0.1.1）
+  - type: textarea
+    id: media
+    attributes:
+      label: 截图 / 录屏
+      description: 直接拖进输入框即可

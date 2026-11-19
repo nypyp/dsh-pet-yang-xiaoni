@@ -87,6 +87,8 @@ def draw_cat(c: Canvas, *, body_dy=0, head_dy=0, head_dx=0, squash=0.0,
              eye='open', tail=0, mouth='smile', ears=0, blush=0, lift=0,
              toy_dy=0, toy_dx=0, tilt=0, front_paws=0):
     base = int(round(50 + body_dy - lift)) + YOFF
+    hx = int(round(28 + head_dx + tilt * 1.5))
+    hy = int(round(20 + head_dy - lift)) + YOFF
     # ---------- tail (behind body) ----------
     th = 0.15 + tail * 0.22
     for i in range(20):
@@ -99,6 +101,10 @@ def draw_cat(c: Canvas, *, body_dy=0, head_dy=0, head_dx=0, squash=0.0,
     # ---------- body ----------
     sq = max(-1.0, min(1.0, squash))
     top = int(round(31 + sq * 2 + body_dy * 0.4 - lift)) + YOFF
+    # Never leave a transparent row between head and body: rounding half-pixel
+    # offsets can otherwise open a 1px gap that the outline paints as a dark
+    # "cut" across the neck (head appears detached).
+    top = min(top, hy + 11)
     half_top = 8
     half_bot = 12 + int(round(-sq * 2))
     for y in range(top, base + 1):
@@ -123,8 +129,6 @@ def draw_cat(c: Canvas, *, body_dy=0, head_dy=0, head_dx=0, squash=0.0,
         c.px(px_ - 1, py + 2, 'deep'); c.px(px_ + 1, py + 2, 'deep')
         c.hline(px_ - 3, px_ + 3, py - 3, 'shade')
     # ---------- head ----------
-    hx = int(round(28 + head_dx + tilt * 1.5))
-    hy = int(round(20 + head_dy - lift)) + YOFF
     c.ellipse(hx, hy, 12, 11, 'fur')
     c.ellipse(hx - 9, hy + 4, 4, 3, 'fur')       # left cheek
     c.ellipse(hx + 9, hy + 4, 4, 3, 'fur')       # right cheek
@@ -223,6 +227,7 @@ PROPS['cloud'] = _rows_from_circles(18, 11, [(9.0, 6.0, 4.4), (4.2, 7.2, 2.9),
                                             (11.6, 3.6, 3.1)])
 PROPS['puff'] = _rows_from_circles(3, 3, [(1.5, 1.5, 1.55)])
 PROPS['puff2'] = _rows_from_circles(5, 5, [(2.5, 2.5, 2.45)])
+PROPS['steam'] = _rows_from_circles(4, 4, [(2.0, 2.0, 1.95)])
 PROPS['z3'] = ["XXX", ".X.", "XXX"]
 PROPS['z4'] = ["XXXX", "..X.", ".X..", "XXXX"]
 PROPS['z5'] = ["XXXXX", "...X.", "..X..", ".X...", "XXXXX"]
@@ -231,7 +236,7 @@ PROP_COLORS = {
     'heart': 'heart', 'heart_s': 'heart', 'spark': 'spark', 'excl': 'eye',
     'qm': 'eye', 'sweat': 'sweat', 'note': 'patch_dk', 'dust': 'dust',
     'cloud': 'cloud', 'puff': 'cloud', 'puff2': 'cloud',
-    'z3': 'cloud', 'z4': 'cloud', 'z5': 'cloud',
+    'z3': 'cloud', 'z4': 'cloud', 'z5': 'cloud', 'steam': 'dust',
 }
 
 def draw_prop(c, kind, x, y):

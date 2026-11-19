@@ -3,10 +3,13 @@ import sys
 import zipfile
 from pathlib import Path
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 
 import build_pack  # noqa: E402
+import sprite  # noqa: E402
 import validate_pack as vp  # noqa: E402
 
 META = json.loads((ROOT / 'pack-meta.json').read_text(encoding='utf-8'))
@@ -70,6 +73,41 @@ def test_states_and_reactions_reference_real_animations():
     assert pack['roam']['anim'] in known
     for item in pack['idlePool']['anims']:
         assert item['anim'] in known
+
+
+def _components(mask):
+    h, w = mask.shape
+    seen = np.zeros_like(mask, bool)
+    sizes = []
+    for y in range(h):
+        for x in range(w):
+            if not mask[y, x] or seen[y, x]:
+                continue
+            stack, seen[y, x], n = [(y, x)], True, 0
+            while stack:
+                cy, cx = stack.pop()
+                n += 1
+                for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    ny, nx = cy + dy, cx + dx
+                    if 0 <= ny < h and 0 <= nx < w and mask[ny, nx] and not seen[ny, nx]:
+                        seen[ny, nx] = True
+                        stack.append((ny, nx))
+            sizes.append(n)
+    return sorted(sizes, reverse=True)
+
+
+def test_head_and_body_stay_connected_on_every_frame():
+    """Regression: rounding half-pixel offsets once opened a 1px row between
+    head and body; the outline painted it dark and the head looked detached.
+    Fur colours (not outline/shadow) must stay one connected blob per frame."""
+    skip = {0, sprite.IDX['outline'], sprite.IDX['shadow']}
+    for name, spec in build_pack.anims().items():
+        for i, pose in enumerate(spec['poses']):
+            pose = {k: v for k, v in pose.items() if k not in ('props', 'zzz')}
+            canvas = sprite.render(dict(pose))
+            mask = np.array([[v not in skip for v in row] for row in canvas.a])
+            big = [size for size in _components(mask) if size > 40]
+            assert len(big) == 1, f'{name} frame {i}: head and body are separated'
 
 
 def test_rebuild_is_reproducible(tmp_path):

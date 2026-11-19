@@ -110,7 +110,8 @@ def anims():
 
     # ---------- busy / mood states ----------
     def f_thinking(t):
-        # a thought cloud above the head with little puffs rising into it
+        # Two beats per loop so a long "thinking" state does not look frozen:
+        # cloud + rising puffs, then a look-up and a blink, then back.
         bob = 0.9 * math.sin(TAU * t)
         props = [('cloud', 33, -11 + bob)]
         for ph in (0.0, 0.5):
@@ -119,15 +120,49 @@ def anims():
                 x = 31 + 6 * u + 1.2 * math.sin(math.pi * u)
                 y = 10 - 12 * u
                 props.append(('puff2' if u > 0.3 else 'puff', x, y))
-        return dict(head_dx=1.2 * math.sin(TAU * t), mouth='flat', ears=-1,
+        if t > 0.52:  # second beat: a sparkle pops out of the cloud
+            props.append(('spark', 48, 2 + 2 * math.sin(TAU * t * 2)))
+        eye = 'blink' if 0.82 < t < 0.88 else 'open'
+        return dict(head_dx=(1.2 * math.sin(TAU * t) + (1.5 if 0.5 < t < 0.75 else 0)),
+                    head_dy=-0.8 if 0.5 < t < 0.62 else 0.0,
+                    mouth='flat', ears=-1, eye=eye,
                     tail=1.5 * math.sin(TAU * t + 0.4), props=props)
-    add('thinking', 24, 100, True, f_thinking)
+    add('thinking', 36, 100, True, f_thinking)
+
+    def f_thinking2(t):
+        # Bonus pose: looks up at its own cloud, ears perked, one "oh" mouth.
+        bob = 0.8 * math.sin(TAU * t)
+        props = [('cloud', 34, -13 + bob)]
+        for ph in (0.0, 0.33):
+            u = (t + ph) % 1.0
+            if u < 0.7:
+                props.append(('puff2' if u > 0.35 else 'puff', 32 + 5 * u, 8 - 12 * u))
+        if t > 0.6:
+            props.append(('spark', 49, 1 + 2 * math.sin(TAU * t)))
+        return dict(head_dy=-1.2, head_dx=1, ears=1, eye='open',
+                    mouth='open' if 0.15 < t < 0.7 else 'smile', props=props)
+    add('thinking2', 24, 100, False, f_thinking2)
 
     def f_working(t):
-        paw = 1 if math.sin(TAU * 3 * t) > 0 else 0
+        # Paw drumming, with a "glance at the screen" beat every other cycle so
+        # the long working state keeps changing without looking random.
+        paw = 1 if math.sin(TAU * 4 * t) > 0 else 0
+        look = 0.55 < t < 0.72
         return dict(front_paws=paw, lift=-0.5 if paw else 0.0,
-                    head_dy=-0.3 * paw, tail=1.2 * math.sin(TAU * t))
-    add('working', 24, 100, True, f_working)
+                    head_dy=(-1.2 if look else -0.3 * paw),
+                    head_dx=(1 if look else 0),
+                    ears=(1 if look else 0),
+                    mouth='open' if look else 'smile',
+                    tail=1.2 * math.sin(TAU * t))
+    add('working', 32, 100, True, f_working)
+
+    def f_working2(t):
+        # Bonus pose: fast drumming, ears forward, head down - "heads down" mode.
+        paw = 1 if math.sin(TAU * 8 * t) > 0 else 0
+        return dict(front_paws=paw, lift=-0.4 if paw else 0.0, head_dy=1.0,
+                    ears=1, eye='open', mouth='smile',
+                    tail=0.8 * math.sin(TAU * 2 * t))
+    add('working2', 24, 80, False, f_working2)
 
     def f_music(t):
         props = []
@@ -284,11 +319,18 @@ def anims():
     add('react-tickle3', 22, 70, False, f_tickle3)
 
     def f_annoyed(t):
-        shake = 1.5 * math.sin(TAU * 3 * t) * (1 - _clamp((t - 0.6) / 0.4))
-        props = [E(38, 2 + 2 * abs(math.sin(math.pi * t * 2)))]
-        return dict(head_dx=shake, eye='angry', ears=-1, mouth='flat',
-                    tail=3 * math.sin(TAU * 2 * t), props=props)
-    add('react-annoyed', 15, 60, False, f_annoyed)
+        # 1.8 s: angry from the first frame (so even a brief slot reads),
+        # a strong shake, steam above the ears, then a huffy hold.
+        shake = 2.2 * math.sin(TAU * 3 * t) * (1 - _clamp((t - 0.55) / 0.45))
+        props = [E(38, 1 + 2 * abs(math.sin(math.pi * t * 3)))]
+        for ph, x0 in ((0.0, 17), (0.5, 40)):
+            u = (t + ph) % 1.0
+            if u < 0.75:
+                props.append(('steam', x0, 18 - 16 * u))
+        return dict(head_dx=shake, eye='angry', ears=-1,
+                    mouth='open' if 0.1 < t < 0.35 else 'flat',
+                    tail=4 * math.sin(TAU * 3 * t), props=props)
+    add('react-annoyed', 30, 60, False, f_annoyed)
 
     def f_drag(t):
         return dict(lift=3, squash=-0.8, eye='open', mouth='open', ears=-1,
@@ -374,7 +416,9 @@ def build(out_dir: Path | None = None, zip_path: Path | None = None, meta: dict 
                    'notification': ['notification'], 'sweeping': ['sweeping'],
                    'carrying': ['carrying'], 'sleeping': ['sleeping'],
                    'waking': ['waking'], 'roam': ['roam-hop']},
-        'bonus': {'attention': dict(anims=['smile-hearts'], chance=0.35)},
+        'bonus': {'attention': dict(anims=['smile-hearts'], chance=0.35),
+                   'thinking': dict(anims=['thinking2'], chance=0.25),
+                   'working': dict(anims=['working2'], chance=0.2)},
         'timings': {'minDisplay': dict(attention=5200, error=4800, sweeping=5600,
                                        notification=3200, carrying=3200,
                                        working=1000, thinking=1000),
