@@ -264,6 +264,7 @@ PROP_COLORS = {
     'bar': 'metal_lt', 'glyph1': 'code_pink', 'glyph2': 'code_green', 'glyph3': 'code',
     'laser': 'laser', 'yarn': 'yarn', 'bfly1': 'bfly', 'bfly2': 'bfly',
     'paw_up': 'fur', 'paw_up_sh': 'shade', 'thread': 'yarn_dk', 'tongue': 'tongue',
+    'reach_r': 'fur', 'reach_l': 'fur', 'dash': 'spark',
     'z3': 'cloud', 'z4': 'cloud', 'z5': 'cloud', 'steam': 'dust',
 }
 
@@ -331,6 +332,23 @@ def draw_prop(c, kind, x, y, arg=None):
             c.hline(x + 1, x + 5, y + 3, 'bfly_lt')
             c.hline(x + 2, x + 4, y + 4, 'bfly_dk')
         c.px(x + 2, y + 2, 'bfly_dk'); c.px(x + 4, y + 2, 'bfly_dk')
+        return
+    if kind in ('reach_r', 'reach_l'):
+        sx, sy = (39, 30) if kind == 'reach_r' else (17, 30)
+        tx, ty = x + 2, y + 2
+        steps = int(max(abs(tx - sx), abs(ty - sy))) + 1
+        for i in range(steps + 1):
+            t = i / steps
+            px = int(round(sx + (tx - sx) * t))
+            py = int(round(sy + (ty - sy) * t))
+            for d in (0, 1, 2):
+                c.px(px, py + d, 'fur')
+        c.ellipse(tx, ty, 2.6, 2.4, 'fur')
+        c.px(tx - 1, ty + 2, 'deep'); c.px(tx + 1, ty + 2, 'deep')
+        return
+    if kind == 'dash':
+        c.hline(x, x + 2, y, 'spark')
+        c.px(x + 3, y, 'spark_lt')
         return
     if kind in ('paw_up', 'paw_up_sh'):
         col = 'shade' if kind == 'paw_up_sh' else 'fur'

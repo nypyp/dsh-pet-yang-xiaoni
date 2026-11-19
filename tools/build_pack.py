@@ -165,58 +165,59 @@ def anims():
     add('thinking', 36, 100, True, f_thinking)
 
     def f_thinking2(t):
-        # 盯飞虫：a moth flutters above; the cat follows it with its head, ears
-        # twitching, and at the end reaches up with one paw.
-        fx = 35 + 8 * math.sin(TAU * 1.6 * t)
-        fy = 7 + 4 * math.sin(TAU * 2.2 * t)
+        # 盯飞虫：飞蛾在头顶扑腾，猫仰头盯着、耳朵立起、尾巴尖抖，
+        # 最后整只往上一跃去够，飞蛾飞走留下一颗星星。
+        fx = 36 + 10 * math.sin(TAU * 1.7 * t)
+        fy = 7 + 5 * math.sin(TAU * 2.4 * t)
         wing = 'bfly1' if int(t * 24) % 4 < 2 else 'bfly2'
-        props = [(wing, fx - 2, fy - 1)]
-        if t > 0.62:
-            props.append(('paw_up', min(44, fx - 1), min(30, fy + 7)))
-        if t > 0.3:
-            props.append(('spark', fx + 4, fy - 2))
-        return dict(eye='open', head_dx=max(-2.5, min(2.5, (fx - 28) / 7)),
-                    head_dy=-1, ears=1,
-                    mouth='open' if t > 0.55 else 'flat',
-                    tail=1.6 * math.sin(TAU * 2.5 * t), props=props)
+        leap = _clamp((t - 0.6) / 0.12) * (1 - _clamp((t - 0.88) / 0.12))
+        props = [(wing, fx - 2, fy - 1), ('spark', fx + 5, fy - 3)]
+        if leap > 0.15:
+            props += [('dust', 14, 52), ('dust', 41, 52)]
+        return dict(eye='open', head_dx=max(-3, min(3, (fx - 28) / 6)),
+                    head_dy=-1.2 - 2.0 * leap, ears=1, lift=3.0 * leap,
+                    squash=-0.22 * leap,
+                    mouth='open' if t > 0.4 else 'flat',
+                    tail=2.0 * math.sin(TAU * 2.5 * t), props=props)
     add('thinking2', 24, 100, False, f_thinking2)
 
     def f_working(t):
-        # 追红点：a laser dot wanders around the cat, which crouches, whips its
-        # tail, tracks it with the head and now and then swats at it.
-        dot_x = 28 + 17 * math.cos(TAU * 0.7 * t + 0.6)
-        dot_y = 31 + 11 * math.sin(TAU * 1.1 * t)
-        pounce = 1.0 if 0.78 < t < 0.9 else 0.0
+        # 追红点：红点绕着猫游走，猫压低身子盯梢、尾巴猛甩，扑的一下整只跳起来
+        # 落地起灰。没有漂浮的爪子，全部靠身体动作读出来。
+        dot_x = 28 + 21 * math.cos(TAU * 0.8 * t + 0.7)
+        dot_y = 24 + 13 * math.sin(TAU * 1.2 * t + 0.3)
+        pounce = _clamp((t - 0.7) / 0.1) * (1 - _clamp((t - 0.86) / 0.14))
+        land = 0.86 < t < 0.93
         props = [('laser', dot_x - 2, dot_y - 2)]
-        swat = math.sin(TAU * 2.0 * t) > 0.45
-        if swat:
-            props.append(('paw_up', min(42, max(6, dot_x + (3 if dot_x > 28 else -6))),
-                          min(40, max(20, dot_y - 2))))
-        if pounce:
-            props.append(('spark', dot_x - 3, dot_y - 4))
-        return dict(squash=0.28 - 0.5 * pounce, lift=2.5 * pounce,
-                    head_dx=max(-2.5, min(2.5, (dot_x - 28) / 7)),
-                    head_dy=(1 if dot_y > 31 else 0) - (1 if pounce else 0),
-                    ears=1, eye='open',
-                    mouth='open' if (swat or pounce) else 'smile',
-                    tail=3.5 * math.sin(TAU * 3 * t), props=props)
+        if abs(dot_x - 28) > 12:
+            props.append(('dash', dot_x + (4 if dot_x > 28 else -7), dot_y - 8))
+        if land:
+            props += [('dust', 13, 52), ('dust', 40, 52)]
+        if pounce > 0.6:
+            props.append(('spark', dot_x - 3, dot_y - 5))
+        return dict(squash=0.34 - 0.62 * pounce, lift=5.0 * pounce,
+                    head_dx=max(-3, min(3, (dot_x - 28) / 6)),
+                    head_dy=(1 if dot_y > 26 else -0.5) - 2.5 * pounce,
+                    ears=1 if pounce < 0.3 else -1, eye='open',
+                    mouth='open' if pounce > 0.2 else 'smile',
+                    tail=5.0 * math.sin(TAU * 3 * t), props=props)
     add('working', 32, 100, True, f_working)
 
     def f_working2(t):
-        # 毛线球：a ball of yarn rolls past; the cat leans over, swats it, the
-        # loose thread trailing behind.
-        ball_x = 34 - 22 * t
-        ball_y = 41 - 4 * abs(math.sin(TAU * 3 * t))
+        # 毛线球：球从右边弹跳着滚到左边，线头拖着；猫歪身子跟着看，尾巴甩，
+        # 球滚过去后冒个爱心。
+        ball_x = 36 - 26 * t
+        bounce = abs(math.sin(TAU * 3 * t))
+        ball_y = 39 - 7 * bounce
         props = [('yarn', ball_x, ball_y),
-                 ('thread', ball_x + 8, ball_y + 7), ('thread', ball_x + 11, ball_y + 8)]
-        swat = 0.2 < t < 0.8
-        if swat:
-            props.append(('paw_up', max(4, ball_x - 9), ball_y + 1))
-        if t > 0.85:
-            props += [('spark', 30, 32), ('heart_s', 36, 28)]
-        return dict(head_dx=max(-2.5, min(2.5, (ball_x - 26) / 8)), head_dy=1,
-                    ears=1, eye='open', mouth='open' if swat else 'smile',
-                    squash=0.12, tail=3.0 * math.sin(TAU * 2 * t), props=props)
+                 ('thread', ball_x + 10, ball_y + 8), ('thread', ball_x + 13, ball_y + 9)]
+        if bounce > 0.9:
+            props += [('dust', ball_x - 2, 52), ('spark', ball_x + 7, ball_y - 2)]
+        if t > 0.8:
+            props += [('heart_s', 36, 30), ('spark', 31, 33)]
+        return dict(head_dx=max(-3, min(3, (ball_x - 28) / 6.5)), head_dy=1,
+                    ears=1, eye='open', mouth='open',
+                    squash=0.18, tail=3.5 * math.sin(TAU * 2 * t), props=props)
     add('working2', 24, 80, False, f_working2)
 
     def f_music(t):

@@ -920,14 +920,14 @@
     },
     "thinking2": {
       "sheet": "thinking2.png",
-      "frameW": 37,
-      "frameH": 53,
+      "frameW": 42,
+      "frameH": 57,
       "cols": 24,
       "box": {
-        "x": 14,
-        "y": 16,
-        "w": 37,
-        "h": 53
+        "x": 13,
+        "y": 14,
+        "w": 42,
+        "h": 57
       },
       "loop": false,
       "ms": 100,
@@ -1032,14 +1032,14 @@
     },
     "working": {
       "sheet": "working.png",
-      "frameW": 44,
-      "frameH": 51,
+      "frameW": 53,
+      "frameH": 55,
       "cols": 32,
       "box": {
-        "x": 5,
-        "y": 18,
-        "w": 44,
-        "h": 51
+        "x": 0,
+        "y": 16,
+        "w": 53,
+        "h": 55
       },
       "loop": true,
       "ms": 100,
@@ -1176,14 +1176,14 @@
     },
     "working2": {
       "sheet": "working2.png",
-      "frameW": 42,
-      "frameH": 46,
+      "frameW": 44,
+      "frameH": 48,
       "cols": 24,
       "box": {
-        "x": 7,
+        "x": 9,
         "y": 23,
-        "w": 42,
-        "h": 46
+        "w": 44,
+        "h": 48
       },
       "loop": false,
       "ms": 80,
