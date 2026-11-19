@@ -43,6 +43,14 @@ PALETTE = {
     'bulb_lt':   (255, 246, 196),
     'progress':  (245, 150, 86),
     'progress_dk': (198, 108, 58),
+    'laser':     (255, 78, 92),
+    'laser_lt':  (255, 172, 180),
+    'yarn':      (234, 138, 168),
+    'yarn_dk':   (186, 90, 126),
+    'yarn_lt':   (250, 198, 212),
+    'bfly':      (128, 198, 240),
+    'bfly_dk':   (64, 118, 184),
+    'bfly_lt':   (240, 250, 255),
 }
 NAMES = list(PALETTE)
 IDX = {n: i + 1 for i, n in enumerate(NAMES)}
@@ -254,6 +262,8 @@ PROP_COLORS = {
     'cloud': 'cloud', 'puff': 'cloud', 'puff2': 'cloud',
     'laptop': 'metal', 'paw_small': 'fur', 'helmet': 'helmet', 'bulb': 'bulb',
     'bar': 'metal_lt', 'glyph1': 'code_pink', 'glyph2': 'code_green', 'glyph3': 'code',
+    'laser': 'laser', 'yarn': 'yarn', 'bfly1': 'bfly', 'bfly2': 'bfly',
+    'paw_up': 'fur', 'paw_up_sh': 'shade', 'thread': 'yarn_dk', 'tongue': 'tongue',
     'z3': 'cloud', 'z4': 'cloud', 'z5': 'cloud', 'steam': 'dust',
 }
 
@@ -289,6 +299,49 @@ def draw_prop(c, kind, x, y, arg=None):
         for i in range(height):
             c.hline(x + 1, x + 2, y + 14 - i, 'progress')
         c.hline(x + 1, x + 2, y + 14 - height, 'progress_dk')
+        return
+    if kind == 'laser':
+        # 5x5 dot: soft glow, bright core, white centre
+        c.px(x + 2, y, 'laser_lt'); c.px(x + 1, y + 1, 'laser_lt')
+        c.px(x + 3, y + 1, 'laser_lt'); c.px(x, y + 2, 'laser_lt')
+        c.px(x + 4, y + 2, 'laser_lt'); c.px(x + 1, y + 3, 'laser_lt')
+        c.px(x + 3, y + 3, 'laser_lt'); c.px(x + 2, y + 4, 'laser_lt')
+        c.rect(x + 1, y + 1, x + 3, y + 3, 'laser')
+        c.px(x + 2, y + 2, 'spark_lt')
+        return
+    if kind == 'yarn':
+        c.ellipse(x + 4, y + 4, 4, 4, 'yarn')
+        for k in range(0, 5):
+            c.px(x + 1 + k, y + 2 + k, 'yarn_dk')
+            c.px(x + 7 - k, y + 2 + k, 'yarn_dk')
+        c.hline(x + 2, x + 6, y + 6, 'yarn_dk')
+        c.px(x + 2, y + 1, 'yarn_lt'); c.px(x + 3, y + 1, 'yarn_lt')
+        return
+    if kind in ('bfly1', 'bfly2'):
+        up = kind == 'bfly1'
+        if up:   # wings raised
+            for k in range(5):
+                c.px(x + 1 + k, y + 1, 'bfly')
+                c.px(x + 1 + k, y + 2, 'bfly' if k % 2 else 'bfly_lt')
+            c.px(x + 2, y, 'bfly_lt'); c.px(x + 4, y, 'bfly_lt')
+            c.hline(x + 2, x + 4, y + 3, 'bfly_dk')
+            c.px(x + 3, y + 4, 'bfly_dk')
+        else:    # wings flat
+            c.hline(x, x + 6, y + 2, 'bfly')
+            c.hline(x + 1, x + 5, y + 3, 'bfly_lt')
+            c.hline(x + 2, x + 4, y + 4, 'bfly_dk')
+        c.px(x + 2, y + 2, 'bfly_dk'); c.px(x + 4, y + 2, 'bfly_dk')
+        return
+    if kind in ('paw_up', 'paw_up_sh'):
+        col = 'shade' if kind == 'paw_up_sh' else 'fur'
+        c.ellipse(x + 2, y + 2, 2, 2, col)
+        c.px(x + 1, y + 4, 'deep'); c.px(x + 2, y + 4, 'deep'); c.px(x + 3, y + 4, 'deep')
+        return
+    if kind == 'thread':
+        c.px(x, y, 'yarn_dk'); c.px(x + 1, y, 'yarn_dk'); c.px(x + 2, y, 'yarn_dk')
+        return
+    if kind == 'tongue':
+        c.px(x, y, 'tongue'); c.px(x + 1, y, 'tongue')
         return
     if kind == 'paw_small':
         c.ellipse(x + 1, y + 1, 2, 1, 'fur')

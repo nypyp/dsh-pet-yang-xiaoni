@@ -109,6 +109,41 @@ def anims():
     add('idle-stretch', 24, 100, False, f_stretch)
 
     # ---------- busy / mood states ----------
+    def f_groom(t):
+        # 舔爪洗脸: raises a paw, licks it, wipes the face - eyes closed.
+        up = _ease(_clamp((t - 0.1) / 0.25)) * (1 - _ease(_clamp((t - 0.75) / 0.25)))
+        props = []
+        if up > 0.3:
+            props.append(('paw_up_sh', 30, 24 - 2 * up))
+        if 0.25 < t < 0.7:
+            props.append(('tongue', 27, 27))
+            props.append(('spark', 18, 22))
+        return dict(head_dx=-1, head_dy=1,
+                    eye='closed' if 0.15 < t < 0.85 else 'open',
+                    mouth='open' if 0.25 < t < 0.7 else 'smile',
+                    tail=1.2 * math.sin(TAU * t), props=props)
+    add('idle-groom', 20, 120, False, f_groom)
+
+    def f_knead(t):
+        # 踩奶: both front paws press in turn, eyes half closed, happy.
+        paw = int(t * 8) % 2
+        props = [('paw_small', 21, 52 - paw), ('paw_small', 33, 52 - (1 - paw))]
+        return dict(front_paws=paw, squash=0.18 + 0.04 * math.sin(TAU * 4 * t),
+                    head_dy=1, eye='closed' if 0.2 < t < 0.8 else 'open',
+                    mouth='smile', ears=-1,
+                    tail=1.0 * math.sin(TAU * t), props=props)
+    add('idle-knead', 16, 100, False, f_knead)
+
+    def f_yawn(t):
+        # 打哈欠: big open mouth, eyes squeezed shut, head up, then settle.
+        yawn = math.sin(math.pi * _clamp((t - 0.1) / 0.7))
+        return dict(head_dy=-2 * yawn, ears=-1,
+                    eye='closed' if yawn > 0.3 else 'open',
+                    mouth='open' if yawn > 0.25 else 'smile',
+                    squash=-0.15 * yawn, tail=1.0 * math.sin(TAU * t),
+                    props=[('spark', 16, 30)] if yawn > 0.8 else [])
+    add('idle-yawn', 14, 120, False, f_yawn)
+
     def f_thinking(t):
         # Two beats per loop so a long "thinking" state does not look frozen:
         # cloud + rising puffs, then a look-up and a blink, then back.
@@ -130,52 +165,58 @@ def anims():
     add('thinking', 36, 100, True, f_thinking)
 
     def f_thinking2(t):
-        # Bonus: "a-ha" - eyes closed, head tilted, the cloud on the left and a
-        # light bulb switching on at the right (Deepy's thinking cloud, but an
-        # idea instead of a second cloud).
-        props = [('cloud', 7, 2), ('bulb', 38, 3)]
-        if t > 0.35:
-            props += [('spark', 33, 2), ('spark', 45, 7)]
-        if t > 0.7:
-            props += [('spark', 36, 10)]
-        return dict(eye='closed' if t > 0.15 else 'open', head_dx=-1,
-                    head_dy=(-1 if 0.3 < t < 0.85 else 0), ears=0,
-                    mouth='open' if t > 0.2 else 'smile', props=props)
+        # 盯飞虫：a moth flutters above; the cat follows it with its head, ears
+        # twitching, and at the end reaches up with one paw.
+        fx = 35 + 8 * math.sin(TAU * 1.6 * t)
+        fy = 7 + 4 * math.sin(TAU * 2.2 * t)
+        wing = 'bfly1' if int(t * 24) % 4 < 2 else 'bfly2'
+        props = [(wing, fx - 2, fy - 1)]
+        if t > 0.62:
+            props.append(('paw_up', min(44, fx - 1), min(30, fy + 7)))
+        if t > 0.3:
+            props.append(('spark', fx + 4, fy - 2))
+        return dict(eye='open', head_dx=max(-2.5, min(2.5, (fx - 28) / 7)),
+                    head_dy=-1, ears=1,
+                    mouth='open' if t > 0.55 else 'flat',
+                    tail=1.6 * math.sin(TAU * 2.5 * t), props=props)
     add('thinking2', 24, 100, False, f_thinking2)
 
     def f_working(t):
-        # Cat sits behind a little laptop: screen glowing, paws drumming on the
-        # keyboard, code glyphs floating up from the screen (Deepy's "typing"
-        # beat, adapted to the cat). Every cycle it glances up at the screen.
-        beat = math.sin(TAU * 4 * t)
-        paw_l = 1 if beat > 0 else 0
-        paw_r = 1 - paw_l
-        look = 0.58 < t < 0.74
-        props = [('laptop', 17, 41),
-                 ('paw_small', 21, 48 - paw_l), ('paw_small', 31, 48 - paw_r)]
-        for kind, ph, x0 in (('glyph1', 0.0, 23), ('glyph2', 0.33, 30), ('glyph3', 0.66, 35)):
-            u = (t + ph) % 1.0
-            if u < 0.7:
-                props.append((kind, x0, 38 - 7 * u))
-        if look:
-            props.append(('spark', 39, 35))
-        return dict(head_dy=(0.0 if look else 1.2), head_dx=(1 if look else 0),
-                    ears=(1 if look else 0), eye='open',
-                    mouth='open' if look else 'smile',
-                    tail=1.0 * math.sin(TAU * t), props=props)
+        # 追红点：a laser dot wanders around the cat, which crouches, whips its
+        # tail, tracks it with the head and now and then swats at it.
+        dot_x = 28 + 17 * math.cos(TAU * 0.7 * t + 0.6)
+        dot_y = 31 + 11 * math.sin(TAU * 1.1 * t)
+        pounce = 1.0 if 0.78 < t < 0.9 else 0.0
+        props = [('laser', dot_x - 2, dot_y - 2)]
+        swat = math.sin(TAU * 2.0 * t) > 0.45
+        if swat:
+            props.append(('paw_up', min(42, max(6, dot_x + (3 if dot_x > 28 else -6))),
+                          min(40, max(20, dot_y - 2))))
+        if pounce:
+            props.append(('spark', dot_x - 3, dot_y - 4))
+        return dict(squash=0.28 - 0.5 * pounce, lift=2.5 * pounce,
+                    head_dx=max(-2.5, min(2.5, (dot_x - 28) / 7)),
+                    head_dy=(1 if dot_y > 31 else 0) - (1 if pounce else 0),
+                    ears=1, eye='open',
+                    mouth='open' if (swat or pounce) else 'smile',
+                    tail=3.5 * math.sin(TAU * 3 * t), props=props)
     add('working', 32, 100, True, f_working)
 
     def f_working2(t):
-        # Bonus: hard hat + a construction-style progress bar filling up
-        # (Deepy's "building" beat).
-        hd = -1 if 0.2 < t < 0.8 else 0
-        fill = 2 + 12 * t
-        props = [('helmet', 22, 4 + hd), ('bar', 44, 33, fill)]
-        if fill > 12:
-            props += [('spark', 40, 27), ('spark', 47, 31)]
-        return dict(head_dy=hd, ears=1, eye='open',
-                    mouth='open' if fill > 12 else 'smile',
-                    tail=2.0 * math.sin(TAU * t), props=props)
+        # 毛线球：a ball of yarn rolls past; the cat leans over, swats it, the
+        # loose thread trailing behind.
+        ball_x = 34 - 22 * t
+        ball_y = 41 - 4 * abs(math.sin(TAU * 3 * t))
+        props = [('yarn', ball_x, ball_y),
+                 ('thread', ball_x + 8, ball_y + 7), ('thread', ball_x + 11, ball_y + 8)]
+        swat = 0.2 < t < 0.8
+        if swat:
+            props.append(('paw_up', max(4, ball_x - 9), ball_y + 1))
+        if t > 0.85:
+            props += [('spark', 30, 32), ('heart_s', 36, 28)]
+        return dict(head_dx=max(-2.5, min(2.5, (ball_x - 26) / 8)), head_dy=1,
+                    ears=1, eye='open', mouth='open' if swat else 'smile',
+                    squash=0.12, tail=3.0 * math.sin(TAU * 2 * t), props=props)
     add('working2', 24, 80, False, f_working2)
 
     def f_music(t):
@@ -424,7 +465,10 @@ def build(out_dir: Path | None = None, zip_path: Path | None = None, meta: dict 
                      'anims': [dict(anim='idle-blink', ms=480, weight=3),
                                dict(anim='idle-tail', ms=2000, weight=2),
                                dict(anim='idle-heart', ms=2400, weight=2),
-                               dict(anim='idle-stretch', ms=2400, weight=2)]},
+                               dict(anim='idle-stretch', ms=2400, weight=2),
+                               dict(anim='idle-groom', ms=2400, weight=2),
+                               dict(anim='idle-knead', ms=1600, weight=2),
+                               dict(anim='idle-yawn', ms=1680, weight=2)]},
         'states': {'idle': ['idle'], 'thinking': ['thinking'], 'working': ['working'],
                    'juggling': ['music'], 'error': ['error'], 'attention': ['happy'],
                    'notification': ['notification'], 'sweeping': ['sweeping'],

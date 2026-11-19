@@ -16,8 +16,8 @@
 | 画布 | 56×72 美术像素（头顶留白给云朵/爱心） |
 | 倍率 | `pixelArt: true`、`scale: 1` |
 | 身体框 / 脚线 | 35×48 美术像素 / baseline 66 |
-| 动画 | 28 段（4 段待机小剧场 + 12 个状态 + 2 段状态彩蛋 + 9 个互动反应 + 2 段特殊） |
-| 体积 | zip 约 74 KB（29 个文件） |
+| 动画 | 31 段（7 段待机小剧场 + 12 个状态 + 2 段状态彩蛋 + 9 个互动反应 + 1 段拖动） |
+| 体积 | zip 约 88 KB（32 个文件） |
 | 校验 | 官方 `pet_pack_check.py --compat-reactions`：**PASS** |
 
 ## 安装
@@ -33,12 +33,12 @@
 
 ## 动效
 
-- **待机**：呼吸、尾巴轻摆；空闲时随机眨眼、左右张望、冒爱心、伸懒腰
+- **待机**：呼吸、尾巴轻摆；空闲时随机眨眼、左右张望、冒爱心、伸懒腰、**舔爪洗脸**、**踩奶**、**打哈欠**
 - **注意**：蹦跳眯眼笑 + 爱心和星星，35% 概率「爱心爆发」彩蛋
 - **思考**：歪头压耳，头顶飘**思考云朵**（云里三个点，小泡泡一朵朵往上冒）；3.6 秒一段，中间会抬头看云、眨眼
-- **思考彩蛋**：眯眼歪头，左边云朵、右边**灯泡亮起**配闪光（3.6 秒里的「啊哈」）
-- **干活**：面前一台发光的小显示器，**前爪在键盘上敲打，代码字符从屏幕上飘出来**；3.2 秒一段，中间抬头看一眼
-- **干活彩蛋**：戴上**安全帽**，旁边的**进度条**一路上涨、涨满冒星星（参考鲸鱼的 building）
+- **思考彩蛋**：**被一只小飞蛾吸引**——头跟着飞虫转、耳朵抖动，最后伸爪去够
+- **干活**：**追红点**——一颗红点围着猫转，猫压低身子、甩尾巴、伸爪去拍，偶尔扑一下
+- **干活彩蛋**：**玩毛线球**——毛线球从右边滚过去，拖着线头，猫伸爪拨弄，最后冒个爱心
 - **多任务 / 出错 / 通知 / 压缩 / 搬运 / 游走 / 唤醒 / 睡觉**：各有对应动作与道具（汗滴、感叹号、音符、灰尘、Zzz）
 - **点左 / 点右**：2.0 秒的歪头反应，随机带星星或小爱心（左右各两种变体）
 - **挠痒**：三种随机反应——爱心连发 / 星星雨 / 害羞甩头（1.5–1.7 秒）
@@ -80,15 +80,18 @@
 | `idle-tail` | 空闲随机：左右张望 | <img src="screenshots/anim/idle-tail.gif" width="112" alt="idle-tail"> |
 | `idle-heart` | 空闲随机：冒一颗爱心 | <img src="screenshots/anim/idle-heart.gif" width="112" alt="idle-heart"> |
 | `idle-stretch` | 空闲随机：伸懒腰 | <img src="screenshots/anim/idle-stretch.gif" width="112" alt="idle-stretch"> |
+| `idle-groom` | 空闲随机：舔爪洗脸 | <img src="screenshots/anim/idle-groom.gif" width="112" alt="idle-groom"> |
+| `idle-knead` | 空闲随机：踩奶 | <img src="screenshots/anim/idle-knead.gif" width="112" alt="idle-knead"> |
+| `idle-yawn` | 空闲随机：打哈欠 | <img src="screenshots/anim/idle-yawn.gif" width="112" alt="idle-yawn"> |
 
 ### 状态动画
 
 | 动画 | 触发条件 | 动图 |
 | --- | --- | --- |
 | `thinking` | 等模型 / 推理 / 重试时（长任务里最常见） | <img src="screenshots/anim/thinking.gif" width="112" alt="thinking"> |
-| `thinking2` | 思考彩蛋：眯眼 + 灯泡亮起，进入思考状态时 25% 抽一次 | <img src="screenshots/anim/thinking2.gif" width="112" alt="thinking2"> |
-| `working` | 工具运行、回复流式输出时：小显示器 + 敲键盘 + 代码字符 | <img src="screenshots/anim/working.gif" width="112" alt="working"> |
-| `working2` | 干活彩蛋：安全帽 + 进度条涨满，进入干活状态时 20% 抽一次 | <img src="screenshots/anim/working2.gif" width="112" alt="working2"> |
+| `thinking2` | 思考彩蛋：盯飞蛾 + 伸爪，进入思考状态时 25% 抽一次 | <img src="screenshots/anim/thinking2.gif" width="112" alt="thinking2"> |
+| `working` | 工具运行、回复流式输出时：追红点（压低身子、甩尾、拍爪） | <img src="screenshots/anim/working.gif" width="112" alt="working"> |
+| `working2` | 干活彩蛋：玩毛线球，进入干活状态时 20% 抽一次 | <img src="screenshots/anim/working2.gif" width="112" alt="working2"> |
 | `music` | 多任务：同时有多个会话在跑 | <img src="screenshots/anim/music.gif" width="112" alt="music"> |
 | `happy` | 注意：一整轮结束且 1.5 秒内没有新轮次（约 5.2 秒） | <img src="screenshots/anim/happy.gif" width="112" alt="happy"> |
 | `smile-hearts` | 注意彩蛋：进入注意状态时 35% 抽一次 | <img src="screenshots/anim/smile-hearts.gif" width="112" alt="smile-hearts"> |
@@ -166,7 +169,7 @@ make preview        # 重新生成 screenshots/
 ## English
 
 *Yang Xiaoni* is a community pixel-pet pack for DSH Go (schema 1): a hand-drawn pixel cat with
-28 frame animations, touch reactions (hearts, sparkles, thought cloud, etc.) and a deterministic
+31 frame animations, touch reactions (hearts, sparkles, thought cloud, etc.) and a deterministic
 build. Install the zip via **Settings → Pets → Import**. Code MIT, artwork CC BY-NC-SA 4.0.
 Not an official DSH Go asset.
 
