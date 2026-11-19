@@ -132,6 +132,17 @@ def test_committed_pack_is_up_to_date(tmp_path):
         'dist zip is stale — run `make build`')
 
 
+def test_readme_gallery_covers_every_animation():
+    pack = load_pack()
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+    for name in pack['animations']:
+        gif = ROOT / 'screenshots' / 'anim' / f'{name}.gif'
+        assert gif.is_file() and gif.stat().st_size > 500, (
+            f'missing gallery gif for {name} — run `make gallery`')
+        assert f'screenshots/anim/{name}.gif' in readme, (
+            f'{name} is not linked from the README gallery')
+
+
 def test_validator_rejects_broken_geometry(tmp_path):
     broken = tmp_path / 'broken'
     broken.mkdir()

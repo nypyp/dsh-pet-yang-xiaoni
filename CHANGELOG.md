@@ -2,6 +2,14 @@
 
 版本号遵循语义化版本；宠物包的行为变化（动画增删、时长、状态映射）都会记录在这里。
 
+## v0.1.2 — 2026-11-20
+
+### 文档
+
+- README 增加「全部动画一览」：28 段动画每段一个 GIF（`screenshots/anim/*.gif`）+ 一张总览图
+  （`screenshots/animations.png`），并逐条写出触发条件，彩蛋不用再靠运气碰。
+- 新增 `tools/gallery.py` 与 `make gallery`；测试会检查每个动画的 GIF 存在且被 README 引用。
+
 ## v0.1.1 — 2026-11-20
 
 ### 修复

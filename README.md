@@ -5,6 +5,8 @@
 
 ![状态预览](screenshots/preview.png)
 
+![动图预览](screenshots/preview.gif)
+
 > **非官方作品**。这是给 [DSH Go / DeepSeek Harness](https://github.com/ccch1mneyyy/dsh-go) 做的社区宠物包，不是官方吉祥物。
 > 格式遵循 dsh-go 的 `docs/design/pets.md` schema 1；校验通过 app 自带的 `pet_pack_check.py --compat-reactions`。
 
@@ -61,7 +63,54 @@
 所以长时间连续任务里主要看到的是**思考**和**干活**，这不是包坏了；`注意` 和 `爱心爆发` 要等一轮结束。
 彩蛋是「进入状态时抽一次」，不是循环播放。
 
-![动图](screenshots/preview.gif)
+## 全部动画一览
+
+![全部 28 段动画](screenshots/animations.png)
+
+点开下面每一格的动图，就能看到对应动画的实际节奏（含触发条件）。
+
+### 待机小剧场（空闲时随机插播）
+
+| 动画 | 触发条件 | 动图 |
+| --- | --- | --- |
+| `idle` | 基础待机循环：呼吸 + 尾巴轻摆 | <img src="screenshots/anim/idle.gif" width="112" alt="idle"> |
+| `idle-blink` | 空闲随机：眨眼 | <img src="screenshots/anim/idle-blink.gif" width="112" alt="idle-blink"> |
+| `idle-tail` | 空闲随机：左右张望 | <img src="screenshots/anim/idle-tail.gif" width="112" alt="idle-tail"> |
+| `idle-heart` | 空闲随机：冒一颗爱心 | <img src="screenshots/anim/idle-heart.gif" width="112" alt="idle-heart"> |
+| `idle-stretch` | 空闲随机：伸懒腰 | <img src="screenshots/anim/idle-stretch.gif" width="112" alt="idle-stretch"> |
+
+### 状态动画
+
+| 动画 | 触发条件 | 动图 |
+| --- | --- | --- |
+| `thinking` | 等模型 / 推理 / 重试时（长任务里最常见） | <img src="screenshots/anim/thinking.gif" width="112" alt="thinking"> |
+| `thinking2` | 思考彩蛋：进入思考状态时 25% 抽一次 | <img src="screenshots/anim/thinking2.gif" width="112" alt="thinking2"> |
+| `working` | 工具运行、回复流式输出时 | <img src="screenshots/anim/working.gif" width="112" alt="working"> |
+| `working2` | 干活彩蛋：进入干活状态时 20% 抽一次 | <img src="screenshots/anim/working2.gif" width="112" alt="working2"> |
+| `music` | 多任务：同时有多个会话在跑 | <img src="screenshots/anim/music.gif" width="112" alt="music"> |
+| `happy` | 注意：一整轮结束且 1.5 秒内没有新轮次（约 5.2 秒） | <img src="screenshots/anim/happy.gif" width="112" alt="happy"> |
+| `smile-hearts` | 注意彩蛋：进入注意状态时 35% 抽一次 | <img src="screenshots/anim/smile-hearts.gif" width="112" alt="smile-hearts"> |
+| `error` | 一轮出错 | <img src="screenshots/anim/error.gif" width="112" alt="error"> |
+| `notification` | 有待确认 / 待回答的问题 | <img src="screenshots/anim/notification.gif" width="112" alt="notification"> |
+| `sweeping` | 压缩上下文时 | <img src="screenshots/anim/sweeping.gif" width="112" alt="sweeping"> |
+| `carrying` | 导入宠物包时 | <img src="screenshots/anim/carrying.gif" width="112" alt="carrying"> |
+| `sleeping` | 90 秒无操作入睡 | <img src="screenshots/anim/sleeping.gif" width="112" alt="sleeping"> |
+| `waking` | 睡觉时被碰一下 | <img src="screenshots/anim/waking.gif" width="112" alt="waking"> |
+| `roam-hop` | 空闲时随机走动 | <img src="screenshots/anim/roam-hop.gif" width="112" alt="roam-hop"> |
+
+### 手指互动
+
+| 动画 | 触发条件 | 动图 |
+| --- | --- | --- |
+| `react-left` | 点身体左半边（与 left2 各 50% 随机） | <img src="screenshots/anim/react-left.gif" width="112" alt="react-left"> |
+| `react-left2` | 点身体左半边（爱心变体） | <img src="screenshots/anim/react-left2.gif" width="112" alt="react-left2"> |
+| `react-right` | 点身体右半边（与 right2 各 50% 随机） | <img src="screenshots/anim/react-right.gif" width="112" alt="react-right"> |
+| `react-right2` | 点身体右半边（爱心变体） | <img src="screenshots/anim/react-right2.gif" width="112" alt="react-right2"> |
+| `react-tickle` | 1.1 秒内连点 3 下：爱心连发（三种随机之一） | <img src="screenshots/anim/react-tickle.gif" width="112" alt="react-tickle"> |
+| `react-tickle2` | 连点 3 下：星星雨（三种随机之一） | <img src="screenshots/anim/react-tickle2.gif" width="112" alt="react-tickle2"> |
+| `react-tickle3` | 连点 3 下：害羞甩头（三种随机之一） | <img src="screenshots/anim/react-tickle3.gif" width="112" alt="react-tickle3"> |
+| `react-annoyed` | 1.1 秒内连点 6 下（App 侧阈值）；第 7 下会被顶掉 | <img src="screenshots/anim/react-annoyed.gif" width="112" alt="react-annoyed"> |
+| `react-drag` | 按住拖动时 | <img src="screenshots/anim/react-drag.gif" width="112" alt="react-drag"> |
 
 ## 构建与校验
 
@@ -90,8 +139,10 @@ make preview        # 重新生成 screenshots/
 | `tools/build_pack.py` | 逐帧采样动画 → 裁帧 → 拼序列帧图 → 写 `pack.json` → 打确定性 zip |
 | `tools/validate_pack.py` | 无依赖校验器（导入门、几何、引用、zip、市场元数据） |
 | `tools/preview.py` | 生成 `screenshots/preview.png` 与 `preview.gif` |
+| `tools/gallery.py` | 生成 `screenshots/anim/*.gif`（每段动画一个动图）与 `animations.png` |
 | `tools/fetch-official-checker.sh` | 拉取官方 checker（pinned commit，不入库） |
 | `tests/` | pytest 测试 |
+| `screenshots/` | 截图与动图（`preview.*`、`animations.png`、`anim/*.gif`） |
 | `docs/` | 包格式摘要、发布规范、设计说明 |
 
 ## 这个包的「规范」依据

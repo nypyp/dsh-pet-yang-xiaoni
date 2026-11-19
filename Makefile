@@ -2,7 +2,7 @@ PY ?= python3
 ID := $(shell $(PY) -c "import json;print(json.load(open('pack-meta.json'))['id'])")
 ZIP := dist/$(ID).zip
 
-.PHONY: all build check check-official preview test dist clean
+.PHONY: all build check check-official preview gallery test dist clean
 
 all: check test
 
@@ -20,10 +20,14 @@ check-official: build
 preview: build
 	$(PY) tools/preview.py
 
+# Per-animation GIFs + contact sheet (README gallery).
+gallery: build
+	$(PY) tools/gallery.py
+
 test:
 	$(PY) -m pytest -q
 
-dist: check preview test
+dist: check preview gallery test
 	@echo "release artifact: $(ZIP)"
 
 clean:
