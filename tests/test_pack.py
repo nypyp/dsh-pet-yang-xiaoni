@@ -132,15 +132,17 @@ def test_committed_pack_is_up_to_date(tmp_path):
         'dist zip is stale — run `make build`')
 
 
-def test_readme_gallery_covers_every_animation():
+def test_gallery_page_covers_every_animation():
     pack = load_pack()
     readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+    page = (ROOT / 'gallery.html').read_text(encoding='utf-8')
+    assert 'gallery.html' in readme, 'README must link the gallery page'
     for name in pack['animations']:
         gif = ROOT / 'screenshots' / 'anim' / f'{name}.gif'
         assert gif.is_file() and gif.stat().st_size > 500, (
             f'missing gallery gif for {name} — run `make gallery`')
-        assert f'screenshots/anim/{name}.gif' in readme, (
-            f'{name} is not linked from the README gallery')
+        assert f'src="screenshots/anim/{name}.gif"' in page, (
+            f'{name} is missing from gallery.html — run `make gallery`')
 
 
 def test_validator_rejects_broken_geometry(tmp_path):

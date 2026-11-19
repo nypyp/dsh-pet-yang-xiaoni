@@ -23,6 +23,7 @@ preview: build
 # Per-animation GIFs + contact sheet (README gallery).
 gallery: build
 	$(PY) tools/gallery.py
+	$(PY) tools/gallery_html.py
 
 test:
 	$(PY) -m pytest -q

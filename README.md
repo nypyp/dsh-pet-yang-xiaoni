@@ -67,55 +67,15 @@
 
 ## 全部动画一览
 
-![全部 28 段动画](screenshots/animations.png)
+👉 **[打开动图总览页（gallery.html）](gallery.html)** —— 31 段动画按「待机小剧场 / 状态 / 手指互动」分组，逐段循环播放，带触发条件和时长。用浏览器直接打开即可（推到 GitHub 后开启 Pages 就能在线看）。
 
-点开下面每一格的动图，就能看到对应动画的实际节奏（含触发条件）。
+![全部 31 段动画](screenshots/animations.png)
 
-### 待机小剧场（空闲时随机插播）
+分组速查：
 
-| 动画 | 触发条件 | 动图 |
-| --- | --- | --- |
-| `idle` | 基础待机循环：呼吸 + 尾巴轻摆 | <img src="screenshots/anim/idle.gif" width="160" alt="idle"> |
-| `idle-blink` | 空闲随机：眨眼 | <img src="screenshots/anim/idle-blink.gif" width="160" alt="idle-blink"> |
-| `idle-tail` | 空闲随机：左右张望 | <img src="screenshots/anim/idle-tail.gif" width="160" alt="idle-tail"> |
-| `idle-heart` | 空闲随机：冒一颗爱心 | <img src="screenshots/anim/idle-heart.gif" width="160" alt="idle-heart"> |
-| `idle-stretch` | 空闲随机：伸懒腰 | <img src="screenshots/anim/idle-stretch.gif" width="160" alt="idle-stretch"> |
-| `idle-groom` | 空闲随机：舔爪洗脸 | <img src="screenshots/anim/idle-groom.gif" width="160" alt="idle-groom"> |
-| `idle-knead` | 空闲随机：踩奶 | <img src="screenshots/anim/idle-knead.gif" width="160" alt="idle-knead"> |
-| `idle-yawn` | 空闲随机：打哈欠 | <img src="screenshots/anim/idle-yawn.gif" width="160" alt="idle-yawn"> |
-
-### 状态动画
-
-| 动画 | 触发条件 | 动图 |
-| --- | --- | --- |
-| `thinking` | 等模型 / 推理 / 重试时（长任务里最常见） | <img src="screenshots/anim/thinking.gif" width="160" alt="thinking"> |
-| `thinking2` | 思考彩蛋：盯飞蛾 + 伸爪，进入思考状态时 25% 抽一次 | <img src="screenshots/anim/thinking2.gif" width="160" alt="thinking2"> |
-| `working` | 工具运行、回复流式输出时：追红点（压低身子、甩尾、拍爪） | <img src="screenshots/anim/working.gif" width="160" alt="working"> |
-| `working2` | 干活彩蛋：玩毛线球，进入干活状态时 20% 抽一次 | <img src="screenshots/anim/working2.gif" width="160" alt="working2"> |
-| `music` | 多任务：同时有多个会话在跑 | <img src="screenshots/anim/music.gif" width="160" alt="music"> |
-| `happy` | 注意：一整轮结束且 1.5 秒内没有新轮次（约 5.2 秒） | <img src="screenshots/anim/happy.gif" width="160" alt="happy"> |
-| `smile-hearts` | 注意彩蛋：进入注意状态时 35% 抽一次 | <img src="screenshots/anim/smile-hearts.gif" width="160" alt="smile-hearts"> |
-| `error` | 一轮出错 | <img src="screenshots/anim/error.gif" width="160" alt="error"> |
-| `notification` | 有待确认 / 待回答的问题 | <img src="screenshots/anim/notification.gif" width="160" alt="notification"> |
-| `sweeping` | 压缩上下文时 | <img src="screenshots/anim/sweeping.gif" width="160" alt="sweeping"> |
-| `carrying` | 导入宠物包时 | <img src="screenshots/anim/carrying.gif" width="160" alt="carrying"> |
-| `sleeping` | 90 秒无操作入睡 | <img src="screenshots/anim/sleeping.gif" width="160" alt="sleeping"> |
-| `waking` | 睡觉时被碰一下 | <img src="screenshots/anim/waking.gif" width="160" alt="waking"> |
-| `roam-hop` | 空闲时随机走动 | <img src="screenshots/anim/roam-hop.gif" width="160" alt="roam-hop"> |
-
-### 手指互动
-
-| 动画 | 触发条件 | 动图 |
-| --- | --- | --- |
-| `react-left` | 点身体左半边（与 left2 各 50% 随机） | <img src="screenshots/anim/react-left.gif" width="160" alt="react-left"> |
-| `react-left2` | 点身体左半边（爱心变体） | <img src="screenshots/anim/react-left2.gif" width="160" alt="react-left2"> |
-| `react-right` | 点身体右半边（与 right2 各 50% 随机） | <img src="screenshots/anim/react-right.gif" width="160" alt="react-right"> |
-| `react-right2` | 点身体右半边（爱心变体） | <img src="screenshots/anim/react-right2.gif" width="160" alt="react-right2"> |
-| `react-tickle` | 1.1 秒内连点 3 下：爱心连发（三种随机之一） | <img src="screenshots/anim/react-tickle.gif" width="160" alt="react-tickle"> |
-| `react-tickle2` | 连点 3 下：星星雨（三种随机之一） | <img src="screenshots/anim/react-tickle2.gif" width="160" alt="react-tickle2"> |
-| `react-tickle3` | 连点 3 下：害羞甩头（三种随机之一） | <img src="screenshots/anim/react-tickle3.gif" width="160" alt="react-tickle3"> |
-| `react-annoyed` | 1.1 秒内连点 6 下（App 侧阈值）；第 7 下会被顶掉 | <img src="screenshots/anim/react-annoyed.gif" width="160" alt="react-annoyed"> |
-| `react-drag` | 按住拖动时 | <img src="screenshots/anim/react-drag.gif" width="160" alt="react-drag"> |
+- **待机小剧场（8）**：`idle`、`idle-blink`、`idle-tail`、`idle-heart`、`idle-stretch`、`idle-groom`、`idle-knead`、`idle-yawn`
+- **状态（14）**：`thinking`、`thinking2`、`working`、`working2`、`music`、`happy`、`smile-hearts`、`error`、`notification`、`sweeping`、`carrying`、`sleeping`、`waking`、`roam-hop`
+- **手指互动（9）**：`react-left`、`react-left2`、`react-right`、`react-right2`、`react-tickle`、`react-tickle2`、`react-tickle3`、`react-annoyed`、`react-drag`
 
 ## 构建与校验
 
