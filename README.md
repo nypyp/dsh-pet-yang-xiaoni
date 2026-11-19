@@ -67,7 +67,7 @@
 
 ## 全部动画一览
 
-👉 **[打开动图总览页（gallery.html）](gallery.html)** —— 31 段动画按「待机小剧场 / 状态 / 手指互动」分组，逐段循环播放，带触发条件和时长。用浏览器直接打开即可（推到 GitHub 后开启 Pages 就能在线看）。
+👉 **[在线动图总览](https://nypyp.github.io/dsh-pet-yang-xiaoni/)**（仓库里是 [`gallery.html`](gallery.html)） —— 31 段动画按「待机小剧场 / 状态 / 手指互动」分组，逐段循环播放，带触发条件和时长。用浏览器直接打开即可（推到 GitHub 后开启 Pages 就能在线看）。
 
 ![全部 31 段动画](screenshots/animations.png)
 

@@ -150,7 +150,9 @@ def build():
 </html>
 '''
     (ROOT / 'gallery.html').write_text(html, encoding='utf-8')
-    print(f'gallery.html ({len(PACK["animations"])} animations)')
+    # GitHub Pages serves index.html at the site root; keep it identical.
+    (ROOT / 'index.html').write_text(html, encoding='utf-8')
+    print(f'gallery.html + index.html ({len(PACK["animations"])} animations)')
 
 
 if __name__ == '__main__':
