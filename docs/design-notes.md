@@ -24,6 +24,8 @@ App 里「标准」档 `k = round(30 × dpr ÷ contentBox.h)`，dpr 2.75 时 k=2
 
 - 动作参数：`body_dy`、`head_dx/dy`、`lift`、`squash`、`tail`、`ears`、`front_paws`、`eye`、`mouth`
 - 道具：`props` 里放 `heart / heart_s / spark / excl / qm / sweat / note / dust / cloud / puff / z3-z5`
+  以及 `laptop`（带发光屏幕的小显示器）、`paw_small`（键盘上的小爪）、`glyph1-3`（飘起来的代码字符）、
+  `helmet`（安全帽）、`bulb`（灯泡）、`bar`（进度条，可带填充高度参数）
 - 时间统一按参考宠物的量级：点按 2.0 s（40 帧 × 50 ms）、挠痒 1.68 s、状态循环 2.4~3.2 s
 
 ### 时长基准（对照 dsh-go 自带的 Deepy 小鲸鱼 / 鲸娘）
@@ -37,6 +39,8 @@ App 里「标准」档 `k = round(30 × dpr ÷ contentBox.h)`，dpr 2.75 时 k=2
 | 待机 | 24f / 2400ms | 48f / 2400ms | 21f / 5280ms |
 | 思考（长任务） | 36f / 3600ms | 48f / 2400ms | 17f / 3400ms |
 | 干活（长任务） | 32f / 3200ms | 48f / 2400ms | 14f / 2340ms |
+| 干活彩蛋（安全帽+进度条） | 24f / 1920ms | 48f / 2400ms（building） | 24f / 2520ms（building） |
+| 思考彩蛋（灯泡） | 24f / 2400ms | 16f / 3400ms（thinking） | 17f / 3400ms（thinking） |
 | 睡觉 | 32f / 3200ms | 64f / 3200ms | 6f / 1980ms |
 
 ## 状态映射

@@ -1,6 +1,6 @@
 [project]
 name = "dsh-pet-yang-xiaoni"
-version = "0.1.2"
+version = "0.1.3"
 description = "阳小妮 — a hand-drawn pixel pet pack for DSH Go (schema 1)"
 requires-python = ">=3.10"
 license = { text = "MIT (code), CC BY-NC-SA 4.0 (art)" }

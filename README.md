@@ -36,7 +36,9 @@
 - **待机**：呼吸、尾巴轻摆；空闲时随机眨眼、左右张望、冒爱心、伸懒腰
 - **注意**：蹦跳眯眼笑 + 爱心和星星，35% 概率「爱心爆发」彩蛋
 - **思考**：歪头压耳，头顶飘**思考云朵**（云里三个点，小泡泡一朵朵往上冒）；3.6 秒一段，中间会抬头看云、眨眼
-- **干活**：前爪交替敲打 + 抬头看屏幕的节拍；3.2 秒一段
+- **思考彩蛋**：眯眼歪头，左边云朵、右边**灯泡亮起**配闪光（3.6 秒里的「啊哈」）
+- **干活**：面前一台发光的小显示器，**前爪在键盘上敲打，代码字符从屏幕上飘出来**；3.2 秒一段，中间抬头看一眼
+- **干活彩蛋**：戴上**安全帽**，旁边的**进度条**一路上涨、涨满冒星星（参考鲸鱼的 building）
 - **多任务 / 出错 / 通知 / 压缩 / 搬运 / 游走 / 唤醒 / 睡觉**：各有对应动作与道具（汗滴、感叹号、音符、灰尘、Zzz）
 - **点左 / 点右**：2.0 秒的歪头反应，随机带星星或小爱心（左右各两种变体）
 - **挠痒**：三种随机反应——爱心连发 / 星星雨 / 害羞甩头（1.5–1.7 秒）
@@ -84,9 +86,9 @@
 | 动画 | 触发条件 | 动图 |
 | --- | --- | --- |
 | `thinking` | 等模型 / 推理 / 重试时（长任务里最常见） | <img src="screenshots/anim/thinking.gif" width="112" alt="thinking"> |
-| `thinking2` | 思考彩蛋：进入思考状态时 25% 抽一次 | <img src="screenshots/anim/thinking2.gif" width="112" alt="thinking2"> |
-| `working` | 工具运行、回复流式输出时 | <img src="screenshots/anim/working.gif" width="112" alt="working"> |
-| `working2` | 干活彩蛋：进入干活状态时 20% 抽一次 | <img src="screenshots/anim/working2.gif" width="112" alt="working2"> |
+| `thinking2` | 思考彩蛋：眯眼 + 灯泡亮起，进入思考状态时 25% 抽一次 | <img src="screenshots/anim/thinking2.gif" width="112" alt="thinking2"> |
+| `working` | 工具运行、回复流式输出时：小显示器 + 敲键盘 + 代码字符 | <img src="screenshots/anim/working.gif" width="112" alt="working"> |
+| `working2` | 干活彩蛋：安全帽 + 进度条涨满，进入干活状态时 20% 抽一次 | <img src="screenshots/anim/working2.gif" width="112" alt="working2"> |
 | `music` | 多任务：同时有多个会话在跑 | <img src="screenshots/anim/music.gif" width="112" alt="music"> |
 | `happy` | 注意：一整轮结束且 1.5 秒内没有新轮次（约 5.2 秒） | <img src="screenshots/anim/happy.gif" width="112" alt="happy"> |
 | `smile-hearts` | 注意彩蛋：进入注意状态时 35% 抽一次 | <img src="screenshots/anim/smile-hearts.gif" width="112" alt="smile-hearts"> |

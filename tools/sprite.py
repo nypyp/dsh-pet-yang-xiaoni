@@ -30,6 +30,19 @@ PALETTE = {
     'dust':      (176, 168, 158),
     'cloud':     (241, 246, 252),
     'cloud_sh':  (204, 217, 236),
+    'metal':     (70, 76, 90),
+    'metal_lt':  (116, 124, 142),
+    'screen':    (92, 206, 226),
+    'screen_dk': (46, 142, 168),
+    'code':      (238, 251, 255),
+    'code_pink': (236, 142, 172),
+    'code_green':(150, 224, 164),
+    'helmet':    (247, 194, 88),
+    'helmet_dk': (206, 148, 56),
+    'bulb':      (255, 214, 110),
+    'bulb_lt':   (255, 246, 196),
+    'progress':  (245, 150, 86),
+    'progress_dk': (198, 108, 58),
 }
 NAMES = list(PALETTE)
 IDX = {n: i + 1 for i, n in enumerate(NAMES)}
@@ -229,6 +242,9 @@ PROPS['puff'] = _rows_from_circles(3, 3, [(1.5, 1.5, 1.55)])
 PROPS['puff2'] = _rows_from_circles(5, 5, [(2.5, 2.5, 2.45)])
 PROPS['steam'] = _rows_from_circles(4, 4, [(2.0, 2.0, 1.95)])
 PROPS['z3'] = ["XXX", ".X.", "XXX"]
+PROPS['glyph1'] = ["X..", ".X.", "X.."]      # </
+PROPS['glyph2'] = ["XXX", "X.X", "XXX"]      # {} box-ish bracket
+PROPS['glyph3'] = ["X.X", "X.X", "XXX"]      # 01
 PROPS['z4'] = ["XXXX", "..X.", ".X..", "XXXX"]
 PROPS['z5'] = ["XXXXX", "...X.", "..X..", ".X...", "XXXXX"]
 
@@ -236,10 +252,48 @@ PROP_COLORS = {
     'heart': 'heart', 'heart_s': 'heart', 'spark': 'spark', 'excl': 'eye',
     'qm': 'eye', 'sweat': 'sweat', 'note': 'patch_dk', 'dust': 'dust',
     'cloud': 'cloud', 'puff': 'cloud', 'puff2': 'cloud',
+    'laptop': 'metal', 'paw_small': 'fur', 'helmet': 'helmet', 'bulb': 'bulb',
+    'bar': 'metal_lt', 'glyph1': 'code_pink', 'glyph2': 'code_green', 'glyph3': 'code',
     'z3': 'cloud', 'z4': 'cloud', 'z5': 'cloud', 'steam': 'dust',
 }
 
-def draw_prop(c, kind, x, y):
+def draw_prop(c, kind, x, y, arg=None):
+    x, y = int(x), int(y)
+    if kind == 'laptop':
+        # lid with a glowing screen + keyboard in front of the cat's lap
+        c.rect(x, y, x + 17, y + 8, 'metal')
+        c.rect(x + 2, y + 1, x + 15, y + 6, 'screen')
+        c.hline(x + 3, x + 9, y + 2, 'code')
+        c.hline(x + 3, x + 13, y + 3, 'screen_dk')
+        c.hline(x + 3, x + 7, y + 4, 'code')
+        c.hline(x + 3, x + 11, y + 5, 'screen_dk')
+        c.rect(x - 1, y + 9, x + 18, y + 11, 'metal_lt')
+        for kx in range(x + 1, x + 18, 2):
+            c.px(kx, y + 10, 'metal')
+        return
+    if kind == 'bulb':
+        c.ellipse(x + 3, y + 3, 3, 3, 'bulb')
+        c.rect(x + 2, y + 6, x + 4, y + 7, 'metal_lt')
+        c.px(x + 2, y + 1, 'bulb_lt'); c.px(x + 4, y + 2, 'bulb_lt')
+        return
+    if kind == 'helmet':
+        for dy in range(0, 4):
+            half = 6 - abs(dy - 2)
+            c.hline(x + 6 - half, x + 6 + half, y + dy, 'helmet')
+        c.hline(x, x + 12, y + 4, 'helmet_dk')
+        c.px(x + 4, y + 1, 'bulb_lt'); c.px(x + 8, y + 2, 'bulb_lt')
+        return
+    if kind == 'bar':
+        height = 14 if arg is None else max(0, min(14, int(arg)))
+        c.rect(x, y, x + 3, y + 15, 'metal')
+        for i in range(height):
+            c.hline(x + 1, x + 2, y + 14 - i, 'progress')
+        c.hline(x + 1, x + 2, y + 14 - height, 'progress_dk')
+        return
+    if kind == 'paw_small':
+        c.ellipse(x + 1, y + 1, 2, 1, 'fur')
+        c.hline(x, x + 2, y + 2, 'deep')
+        return
     rows = PROPS[kind]
     col = PROP_COLORS[kind]
     for dy, row in enumerate(rows):
@@ -273,8 +327,10 @@ def render(pose):
         n = max(1, int(round(zzz * 3)))
         for kind, x, y in marks[:n]:
             draw_prop(c, kind, x, y)
-    for (kind, x, y) in props:
-        draw_prop(c, kind, int(round(x)), int(round(y)) + YOFF)
+    for prop in props:
+        kind, x, y = prop[0], prop[1], prop[2]
+        arg = prop[3] if len(prop) > 3 else None
+        draw_prop(c, kind, int(round(x)), int(round(y)) + YOFF, arg)
     lift = pose.get('lift', 0.0) + pose.get('body_dy', 0) * -0.5
     if lift < 8:
         w = max(4, int(round(8 - lift * 0.8)))

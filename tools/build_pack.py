@@ -130,38 +130,52 @@ def anims():
     add('thinking', 36, 100, True, f_thinking)
 
     def f_thinking2(t):
-        # Bonus pose: looks up at its own cloud, ears perked, one "oh" mouth.
-        bob = 0.8 * math.sin(TAU * t)
-        props = [('cloud', 34, -13 + bob)]
-        for ph in (0.0, 0.33):
-            u = (t + ph) % 1.0
-            if u < 0.7:
-                props.append(('puff2' if u > 0.35 else 'puff', 32 + 5 * u, 8 - 12 * u))
-        if t > 0.6:
-            props.append(('spark', 49, 1 + 2 * math.sin(TAU * t)))
-        return dict(head_dy=-1.2, head_dx=1, ears=1, eye='open',
-                    mouth='open' if 0.15 < t < 0.7 else 'smile', props=props)
+        # Bonus: "a-ha" - eyes closed, head tilted, the cloud on the left and a
+        # light bulb switching on at the right (Deepy's thinking cloud, but an
+        # idea instead of a second cloud).
+        props = [('cloud', 7, 2), ('bulb', 38, 3)]
+        if t > 0.35:
+            props += [('spark', 33, 2), ('spark', 45, 7)]
+        if t > 0.7:
+            props += [('spark', 36, 10)]
+        return dict(eye='closed' if t > 0.15 else 'open', head_dx=-1,
+                    head_dy=(-1 if 0.3 < t < 0.85 else 0), ears=0,
+                    mouth='open' if t > 0.2 else 'smile', props=props)
     add('thinking2', 24, 100, False, f_thinking2)
 
     def f_working(t):
-        # Paw drumming, with a "glance at the screen" beat every other cycle so
-        # the long working state keeps changing without looking random.
-        paw = 1 if math.sin(TAU * 4 * t) > 0 else 0
-        look = 0.55 < t < 0.72
-        return dict(front_paws=paw, lift=-0.5 if paw else 0.0,
-                    head_dy=(-1.2 if look else -0.3 * paw),
-                    head_dx=(1 if look else 0),
-                    ears=(1 if look else 0),
+        # Cat sits behind a little laptop: screen glowing, paws drumming on the
+        # keyboard, code glyphs floating up from the screen (Deepy's "typing"
+        # beat, adapted to the cat). Every cycle it glances up at the screen.
+        beat = math.sin(TAU * 4 * t)
+        paw_l = 1 if beat > 0 else 0
+        paw_r = 1 - paw_l
+        look = 0.58 < t < 0.74
+        props = [('laptop', 17, 41),
+                 ('paw_small', 21, 48 - paw_l), ('paw_small', 31, 48 - paw_r)]
+        for kind, ph, x0 in (('glyph1', 0.0, 23), ('glyph2', 0.33, 30), ('glyph3', 0.66, 35)):
+            u = (t + ph) % 1.0
+            if u < 0.7:
+                props.append((kind, x0, 38 - 7 * u))
+        if look:
+            props.append(('spark', 39, 35))
+        return dict(head_dy=(0.0 if look else 1.2), head_dx=(1 if look else 0),
+                    ears=(1 if look else 0), eye='open',
                     mouth='open' if look else 'smile',
-                    tail=1.2 * math.sin(TAU * t))
+                    tail=1.0 * math.sin(TAU * t), props=props)
     add('working', 32, 100, True, f_working)
 
     def f_working2(t):
-        # Bonus pose: fast drumming, ears forward, head down - "heads down" mode.
-        paw = 1 if math.sin(TAU * 8 * t) > 0 else 0
-        return dict(front_paws=paw, lift=-0.4 if paw else 0.0, head_dy=1.0,
-                    ears=1, eye='open', mouth='smile',
-                    tail=0.8 * math.sin(TAU * 2 * t))
+        # Bonus: hard hat + a construction-style progress bar filling up
+        # (Deepy's "building" beat).
+        hd = -1 if 0.2 < t < 0.8 else 0
+        fill = 2 + 12 * t
+        props = [('helmet', 22, 4 + hd), ('bar', 44, 33, fill)]
+        if fill > 12:
+            props += [('spark', 40, 27), ('spark', 47, 31)]
+        return dict(head_dy=hd, ears=1, eye='open',
+                    mouth='open' if fill > 12 else 'smile',
+                    tail=2.0 * math.sin(TAU * t), props=props)
     add('working2', 24, 80, False, f_working2)
 
     def f_music(t):

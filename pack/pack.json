@@ -672,14 +672,14 @@
     },
     "thinking2": {
       "sheet": "thinking2.png",
-      "frameW": 39,
-      "frameH": 67,
+      "frameW": 42,
+      "frameH": 52,
       "cols": 24,
       "box": {
-        "x": 14,
-        "y": 2,
-        "w": 39,
-        "h": 67
+        "x": 7,
+        "y": 17,
+        "w": 42,
+        "h": 52
       },
       "loop": false,
       "ms": 100,
@@ -789,7 +789,7 @@
       "cols": 32,
       "box": {
         "x": 14,
-        "y": 21,
+        "y": 22,
         "w": 35,
         "h": 48
       },
@@ -928,14 +928,14 @@
     },
     "working2": {
       "sheet": "working2.png",
-      "frameW": 35,
-      "frameH": 46,
+      "frameW": 37,
+      "frameH": 51,
       "cols": 24,
       "box": {
         "x": 14,
-        "y": 23,
-        "w": 35,
-        "h": 46
+        "y": 18,
+        "w": 37,
+        "h": 51
       },
       "loop": false,
       "ms": 80,
