@@ -132,9 +132,9 @@ def build():
   <div class="sub"><b>DSH Go 像素宠物包</b> · {META["author"]} · {META["license"]} ·
     画布 {PACK["canvas"]["w"]}×{PACK["canvas"]["h"]} · 每格循环播放对应动画</div>
   <div class="nav">
-    <a href="README.md">← 回到 README</a>
+    <a href="https://github.com/nypyp/dsh-pet-yang-xiaoni">← GitHub 仓库</a>
     <a href="screenshots/animations.png">总览图</a>
-    <a href="dist/{META["id"]}.zip">下载宠物包</a>
+    <a href="dist/{META["id"]}.zip" download>下载宠物包</a>
     <button onclick="document.body.classList.toggle('big')">切换大小</button>
   </div>
 </header>

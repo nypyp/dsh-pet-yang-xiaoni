@@ -7,6 +7,8 @@
 
 ![动图预览](screenshots/preview.gif)
 
+**在线看**：[动图总览](https://nypyp.github.io/dsh-pet-yang-xiaoni/) · [GitHub 仓库](https://github.com/nypyp/dsh-pet-yang-xiaoni) · [下载 zip](https://github.com/nypyp/dsh-pet-yang-xiaoni/releases)
+
 > **非官方作品**。这是给 [DSH Go / DeepSeek Harness](https://github.com/ccch1mneyyy/dsh-go) 做的社区宠物包，不是官方吉祥物。
 > 格式遵循 dsh-go 的 `docs/design/pets.md` schema 1；校验通过 app 自带的 `pet_pack_check.py --compat-reactions`。
 

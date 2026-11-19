@@ -1,4 +1,5 @@
-dist/
+dist/*
+!dist/yang-xiaoni.zip
 .cache/
 __pycache__/
 *.pyc
