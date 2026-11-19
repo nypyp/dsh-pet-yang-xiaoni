@@ -1,0 +1,3 @@
+# runtime (tools/build_pack.py, tools/preview.py)
+Pillow>=10.0
+numpy>=1.24

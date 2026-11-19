@@ -1,0 +1,30 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: pip install -r requirements-dev.txt
+      - name: Build pack
+        run: make build
+      - name: Validate (import gate + market metadata)
+        run: make check
+      - name: Validate with the app's official checker
+        run: make check-official
+      - name: Tests
+        run: make test
+      - name: Upload pack zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: yang-xiaoni-pet
+          path: dist/*.zip
